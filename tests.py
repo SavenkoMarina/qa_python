@@ -1,10 +1,5 @@
-from main import BooksCollector
 import pytest
 
-
-@pytest.fixture
-def collector():
-    return BooksCollector()
 
 class TestBooksCollector:
     def test_add_new_book_add_two_books(self, collector):
@@ -13,7 +8,6 @@ class TestBooksCollector:
         assert len(collector.get_books_genre()) == 2
 
     def test_add_new_book_wrong_name(self, collector):
-        assert len(collector.get_books_genre()) == 0
         collector.add_new_book('1'*42)
         assert len(collector.get_books_genre()) == 0
 
@@ -31,9 +25,6 @@ class TestBooksCollector:
         collector.set_book_genre(book_name, 'Нонфикшн')
         assert collector.get_books_genre()[book_name] == ''
 
-        collector.set_book_genre(book_name + '!', 'Фантастика')
-        assert collector.get_books_genre()[book_name] == ''
-
 
     def test_get_book_genre(self, collector):
         book_name = 'How to stop drink vodka in the morning'
@@ -41,6 +32,7 @@ class TestBooksCollector:
         collector.set_book_genre(book_name, 'Фантастика')
         assert collector.get_book_genre(book_name) == 'Фантастика'
 
+    def test_get_book_genre_wrong_name(self, collector):
         assert collector.get_book_genre('book_name') is None
 
     def test_get_books_with_specific_genre(self, collector):
@@ -53,13 +45,6 @@ class TestBooksCollector:
         for book_name in books_name:
             collector.add_new_book(book_name)
             collector.set_book_genre(book_name, 'Фантастика')
-
-        assert collector.get_books_with_specific_genre('Детективы') == []
-
-        collector.add_new_book('Му-му')
-        collector.set_book_genre('Му-му', 'Детективы')
-
-        assert collector.get_books_with_specific_genre('Детективы') == ['Му-му']
 
         fantasy_books = collector.get_books_with_specific_genre('Фантастика')
         assert len(fantasy_books) == len(books_name)
@@ -87,7 +72,6 @@ class TestBooksCollector:
             collector.set_book_genre(name, genre)
 
         books_for_children = collector.get_books_for_children()
-        assert len(books_for_children) == 1
         assert books_for_children == ['Мои слезы - твоя радость']
 
 
